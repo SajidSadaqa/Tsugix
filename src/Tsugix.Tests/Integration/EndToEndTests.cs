@@ -1,5 +1,6 @@
 using Tsugix.Core;
 using Tsugix.Process;
+using System.Runtime.InteropServices;
 using Xunit;
 
 namespace Tsugix.Tests.Integration;
@@ -11,6 +12,16 @@ namespace Tsugix.Tests.Integration;
 /// </summary>
 public class EndToEndTests
 {
+    private static (string Executable, string[] Arguments) GetShellCommand(string shellCommand)
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            return ("cmd", new[] { "/c", shellCommand });
+        }
+
+        return ("bash", new[] { "-lc", shellCommand });
+    }
+
     /// <summary>
     /// Test: Successful command execution returns exit code 0.
     /// </summary>
@@ -20,8 +31,8 @@ public class EndToEndTests
         var outputHandler = new OutputHandler(TextWriter.Null, TextWriter.Null);
         var processManager = new ProcessManager(outputHandler);
         
-        // Use 'cmd /c echo test' on Windows
-        var result = await processManager.ExecuteAsync("cmd", new[] { "/c", "echo", "test" });
+        var (executable, arguments) = GetShellCommand("echo test");
+        var result = await processManager.ExecuteAsync(executable, arguments);
         
         Assert.Equal(0, result.ExitCode);
         Assert.True(result.IsSuccess);
@@ -36,8 +47,8 @@ public class EndToEndTests
         var outputHandler = new OutputHandler(TextWriter.Null, TextWriter.Null);
         var processManager = new ProcessManager(outputHandler);
         
-        // Use 'cmd /c exit 1' to simulate failure
-        var result = await processManager.ExecuteAsync("cmd", new[] { "/c", "exit", "1" });
+        var (executable, arguments) = GetShellCommand("exit 1");
+        var result = await processManager.ExecuteAsync(executable, arguments);
         
         Assert.Equal(1, result.ExitCode);
         Assert.False(result.IsSuccess);
@@ -53,7 +64,8 @@ public class EndToEndTests
         var outputHandler = new OutputHandler(stdoutWriter, TextWriter.Null);
         var processManager = new ProcessManager(outputHandler);
         
-        await processManager.ExecuteAsync("cmd", new[] { "/c", "echo", "hello" });
+        var (executable, arguments) = GetShellCommand("echo hello");
+        await processManager.ExecuteAsync(executable, arguments);
         
         var output = stdoutWriter.ToString();
         Assert.Contains("hello", output);
@@ -69,8 +81,8 @@ public class EndToEndTests
         var outputHandler = new OutputHandler(TextWriter.Null, stderrWriter);
         var processManager = new ProcessManager(outputHandler);
         
-        // Use 'cmd /c echo error 1>&2' to write to stderr
-        await processManager.ExecuteAsync("cmd", new[] { "/c", "echo", "error", "1>&2" });
+        var (executable, arguments) = GetShellCommand("echo error 1>&2");
+        await processManager.ExecuteAsync(executable, arguments);
         
         var captured = outputHandler.GetCapturedStderr();
         Assert.Contains("error", captured);
@@ -85,14 +97,15 @@ public class EndToEndTests
         var outputHandler = new OutputHandler(TextWriter.Null, TextWriter.Null);
         var processManager = new ProcessManager(outputHandler);
         
-        var result = await processManager.ExecuteAsync("cmd", new[] { "/c", "exit", "42" });
+        var (executable, arguments) = GetShellCommand("exit 42");
+        var result = await processManager.ExecuteAsync(executable, arguments);
         
         Assert.False(result.IsSuccess);
         
         var crashReport = CrashReport.FromExecutionResult(result, Environment.CurrentDirectory);
         
         Assert.Equal(42, crashReport.ExitCode);
-        Assert.Contains("cmd", crashReport.Command);
+        Assert.Contains(executable, crashReport.Command);
         Assert.NotNull(crashReport.WorkingDirectory);
         Assert.NotEqual(default, crashReport.Timestamp);
     }
