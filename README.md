@@ -1,4 +1,4 @@
-# Tsugix (tsugi)
+# Tsugix (tsugix)
 
 <p align="center">
   <strong>A CLI tool that wraps any command, catches runtime errors, and uses AI to suggest and apply fixes automatically.</strong>
@@ -122,13 +122,13 @@ flowchart TB
 ```mermaid
 sequenceDiagram
     participant User
-    participant CLI as tsugi CLI
+    participant CLI as tsugix CLI
     participant PM as Process Manager
     participant CE as Context Engine
     participant AI as AI Surgeon
     participant LLM as LLM Provider
 
-    User->>CLI: tsugi run python script.py
+    User->>CLI: tsugix run python script.py
     CLI->>PM: Execute command
     PM->>PM: Capture stdout/stderr
     PM-->>CLI: Execution Result (error)
@@ -266,7 +266,7 @@ dotnet publish src/Tsugix/Tsugix.csproj -c Release -r osx-x64 --self-contained
 # macOS (Apple Silicon)
 dotnet publish src/Tsugix/Tsugix.csproj -c Release -r osx-arm64 --self-contained
 
-# Binary will be in: src/Tsugix/bin/Release/net10.0/{rid}/publish/tsugi
+# Binary will be in: src/Tsugix/bin/Release/net10.0/{rid}/publish/tsugix
 ```
 
 ---
@@ -279,13 +279,13 @@ export OPENAI_API_KEY="sk-..."
 # or
 export ANTHROPIC_API_KEY="sk-ant-..."
 
-# Run a command with tsugi
-tsugi run python script.py
-tsugi run node app.js
-tsugi run dotnet run
+# Run a command with tsugix
+tsugix run python script.py
+tsugix run node app.js
+tsugix run dotnet run
 ```
 
-When your command crashes, tsugi will:
+When your command crashes, tsugix will:
 
 1. Parse the error and stack trace
 2. Extract source context from relevant files
@@ -300,15 +300,15 @@ When your command crashes, tsugi will:
 
 ```bash
 # Basic usage
-tsugi run <command> [args...]
+tsugix run <command> [args...]
 
 # Options
-tsugi run --skip-ai python script.py         # Skip AI analysis, just show error
-tsugi run --auto-apply node app.js           # Auto-apply fixes without confirmation
-tsugi run --auto-rerun dotnet run            # Auto-rerun after applying fix
-tsugi run --no-rerun python test.py          # Skip re-run prompt
-tsugi run --allow-outside-root ./script.py   # Allow patching files outside working dir
-tsugi run --verbose python script.py         # Enable verbose logging
+tsugix run --skip-ai python script.py         # Skip AI analysis, just show error
+tsugix run --auto-apply node app.js           # Auto-apply fixes without confirmation
+tsugix run --auto-rerun dotnet run            # Auto-rerun after applying fix
+tsugix run --no-rerun python test.py          # Skip re-run prompt
+tsugix run --allow-outside-root ./script.py   # Allow patching files outside working dir
+tsugix run --verbose python script.py         # Enable verbose logging
 ```
 
 ---
@@ -368,7 +368,7 @@ Create a `.tsugix.json` file in your project root or home directory:
 
 ### Path Safety
 
-By default, tsugi only patches files within the current working directory. This prevents malicious AI responses from modifying system files or files outside your project.
+By default, tsugix only patches files within the current working directory. This prevents malicious AI responses from modifying system files or files outside your project.
 
 - Files outside the root directory are rejected unless `--allow-outside-root` is specified
 - Path traversal attempts (e.g., `../../../etc/passwd`) are blocked

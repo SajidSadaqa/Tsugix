@@ -106,7 +106,7 @@ public class ProcessManager : IProcessManager
             _logger.LogWarning(LogEvents.ProcessNotFound, "Command not found: {Command}", command);
             metricsScope.SetSuccess(false);
             
-            Console.Error.WriteLine($"tsugi: error: Command not found: {command}");
+            Console.Error.WriteLine($"tsugix: error: Command not found: {command}");
             return new ExecutionResult
             {
                 ExitCode = 127, // Unix convention for command not found
@@ -121,7 +121,7 @@ public class ProcessManager : IProcessManager
             _logger.LogWarning(LogEvents.ProcessNotFound, "Command not found: {Command}", command);
             metricsScope.SetSuccess(false);
             
-            Console.Error.WriteLine($"tsugi: error: Command not found: {command}");
+            Console.Error.WriteLine($"tsugix: error: Command not found: {command}");
             return new ExecutionResult
             {
                 ExitCode = 127,

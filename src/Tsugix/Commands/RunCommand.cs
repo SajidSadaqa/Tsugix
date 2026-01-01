@@ -69,16 +69,16 @@ public class RunCommand : Command
     {
         if (commandArgs.Length == 0)
         {
-            Console.Error.WriteLine("tsugi: error: No command specified");
+            Console.Error.WriteLine("tsugix: error: No command specified");
             Console.Error.WriteLine();
-            Console.Error.WriteLine("Try 'tsugi --help' for more information.");
+            Console.Error.WriteLine("Try 'tsugix --help' for more information.");
             return 1;
         }
         
         var parsed = CommandParser.Parse(commandArgs);
         if (parsed == null)
         {
-            Console.Error.WriteLine("tsugi: error: Invalid command");
+            Console.Error.WriteLine("tsugix: error: Invalid command");
             return 1;
         }
         

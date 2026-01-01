@@ -20,7 +20,7 @@ public static class Program
         {
             var rootCommand = new RootCommand("Tsugix - The Self-Healing Wrapper for Developers")
             {
-                Name = "tsugi"
+                Name = "tsugix"
             };
             
             // Add version option
@@ -38,7 +38,7 @@ public static class Program
             {
                 if (showVersion)
                 {
-                    Console.WriteLine($"tsugi {version}");
+                    Console.WriteLine($"tsugix {version}");
                     Console.WriteLine("The Self-Healing Wrapper for Developers");
                 }
             }, versionOption);

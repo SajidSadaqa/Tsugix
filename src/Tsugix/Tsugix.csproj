@@ -12,7 +12,7 @@
     <OptimizationPreference>Speed</OptimizationPreference>
     
     <!-- Assembly Info -->
-    <AssemblyName>tsugi</AssemblyName>
+    <AssemblyName>tsugix</AssemblyName>
     <RootNamespace>Tsugix</RootNamespace>
     <Version>0.1.0</Version>
     <Description>The Self-Healing Wrapper for Developers</Description>
